@@ -148,7 +148,7 @@ void scanJoystick() {
 
 	while (millis() < timestamp + snakeSpeed) {
 		// calculate snake speed exponentially (10...1000ms)
-		float raw = mapf(analogRead(Pin::potentiometer), 0, 1023, 0, 1);
+		float raw = mapf(675, 0, 1023, 0, 1);
 		snakeSpeed = mapf(pow(raw, 3.5), 0, 1, 10, 1000); // change the speed exponentially
 		if (snakeSpeed == 0) snakeSpeed = 1; // safety: speed can not be 0
 
