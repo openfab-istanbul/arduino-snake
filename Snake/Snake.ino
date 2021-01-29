@@ -27,9 +27,6 @@ struct Pin {
 	static const short joystickY = A3;   // joystick Y axis pin
 	static const short joystickVCC = 15; // virtual VCC for the joystick (Analog 1) (to make the joystick connectable right next to the arduino nano)
 	static const short joystickGND = 14; // virtual GND for the joystick (Analog 0) (to make the joystick connectable right next to the arduino nano)
-
-	static const short potentiometer = A7; // potentiometer for snake speed control
-
 	static const short CLK = 10;   // clock for LED matrix
 	static const short CS  = 11;  // chip-select for LED matrix
 	static const short DIN = 12; // data-in for LED matrix
@@ -97,7 +94,7 @@ Coordinate joystickHome(500, 500);
 
 // snake parameters
 int snakeLength = initialSnakeLength; // choosed by the user in the config section
-int snakeSpeed = 1; // will be set according to potentiometer value, cannot be 0
+int snakeSpeed = 200; // Speed will slow down as the number increase (miliseconds added to every snake movement)
 int snakeDirection = 0; // if it is 0, the snake does not move
 
 // direction constants
@@ -147,10 +144,6 @@ void scanJoystick() {
 	long timestamp = millis();
 
 	while (millis() < timestamp + snakeSpeed) {
-		// calculate snake speed exponentially (10...1000ms)
-		float raw = mapf(650, 0, 1023, 0, 1);
-		snakeSpeed = mapf(pow(raw, 3.5), 0, 1, 10, 1000); // change the speed exponentially
-		if (snakeSpeed == 0) snakeSpeed = 1; // safety: speed can not be 0
 
 		// determine the direction of the snake
 		analogRead(Pin::joystickY) < joystickHome.y - joystickThreshold ? snakeDirection = up    : 0;
