@@ -22,15 +22,14 @@
 // --------------------------------------------------------------- //
 
 // there are defined all the pins
-struct Pin {
-	static const short joystickX = A2;   // joystick X axis pin
-	static const short joystickY = A3;   // joystick Y axis pin
-	static const short joystickVCC = 15; // virtual VCC for the joystick (Analog 1) (to make the joystick connectable right next to the arduino nano)
-	static const short joystickGND = 14; // virtual GND for the joystick (Analog 0) (to make the joystick connectable right next to the arduino nano)
-	static const short CLK = 10;   // clock for LED matrix
-	static const short CS  = 11;  // chip-select for LED matrix
-	static const short DIN = 12; // data-in for LED matrix
-};
+const int joystickUp = A0;   // joystick X axis pin
+const int joystickDown = A1;   // joystick X axis pin
+const int joystickLeft = A2;   // joystick Y axis pin
+const int joystickRight = A3;   // joystick Y axis pin
+
+const int CLK = 10;   // clock for LED matrix
+const int CS  = 11;  // chip-select for LED matrix
+const int DIN = 12; // data-in for LED matrix
 
 // LED matrix brightness: between 0(darkest) and 15(brightest)
 const short intensity = 8;
@@ -53,20 +52,13 @@ void loop() {
 	scanJoystick();    // watches joystick movements & blinks with food
 	calculateSnake();  // calculates snake parameters
 	handleGameStates();
-
-	// uncomment this if you want the current game board to be printed to the serial (slows down the game a bit)
-	// dumpGameBoard();
 }
-
-
-
-
 
 // --------------------------------------------------------------- //
 // -------------------- supporting variables --------------------- //
 // --------------------------------------------------------------- //
 
-LedControl matrix(Pin::DIN, Pin::CLK, Pin::CS, 1);
+LedControl matrix(DIN, CLK, CS, 1);
 
 struct Point {
 	int row = 0, col = 0;
@@ -144,10 +136,10 @@ void scanJoystick() {
 	while (millis() < timestamp + snakeSpeed) {
 
 		// determine the direction of the snake
-		analogRead(Pin::joystickY) < joystickHome.y - joystickThreshold ? snakeDirection = up    : 0;
-		analogRead(Pin::joystickY) > joystickHome.y + joystickThreshold ? snakeDirection = down  : 0;
-		analogRead(Pin::joystickX) < joystickHome.x - joystickThreshold ? snakeDirection = left  : 0;
-		analogRead(Pin::joystickX) > joystickHome.x + joystickThreshold ? snakeDirection = right : 0;
+		if(digitalRead(joystickUp) == false) snakeDirection = up;
+		else if(digitalRead(joystickDown) == false) snakeDirection = down;
+		else if(digitalRead(joystickLeft) == false) snakeDirection = left;
+		else if(digitalRead(joystickRight) == false) snakeDirection = right;
 
 		// ignore directional change by 180 degrees (no effect for non-moving snake)
 		snakeDirection + 2 == previousDirection && previousDirection != 0 ? snakeDirection = previousDirection : 0;
@@ -310,11 +302,11 @@ void unrollSnake() {
 
 
 void initialize() {
-	pinMode(Pin::joystickVCC, OUTPUT);
-	digitalWrite(Pin::joystickVCC, HIGH);
 
-	pinMode(Pin::joystickGND, OUTPUT);
-	digitalWrite(Pin::joystickGND, LOW);
+  pinMode(joystickUp, INPUT_PULLUP);
+  pinMode(joystickDown, INPUT_PULLUP);
+  pinMode(joystickLeft, INPUT_PULLUP);
+  pinMode(joystickRight, INPUT_PULLUP);
 
 	matrix.shutdown(0, false);
 	matrix.setIntensity(0, intensity);
@@ -323,22 +315,6 @@ void initialize() {
 	randomSeed(analogRead(A5));
 	snake.row = random(8);
 	snake.col = random(8);
-}
-
-
-void dumpGameBoard() {
-	String buff = "\n\n\n";
-	for (int row = 0; row < 8; row++) {
-		for (int col = 0; col < 8; col++) {
-			if (gameboard[row][col] < 10) buff += " ";
-			if (gameboard[row][col] != 0) buff += gameboard[row][col];
-			else if (col == food.col && row == food.row) buff += "@";
-			else buff += "-";
-			buff += " ";
-		}
-		buff += "\n";
-	}
-	Serial.println(buff);
 }
 
 // standard map function, but with floats
