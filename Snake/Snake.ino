@@ -45,7 +45,6 @@ const short initialSnakeLength = 3;
 void setup() {
 	Serial.begin(115200);  // set the same baud rate on your Serial Monitor
 	initialize();         // initialize pins & LED matrix
-	calibrateJoystick(); // calibrate the joystick home (do not touch it)
 }
 
 
@@ -307,20 +306,6 @@ void unrollSnake() {
 			}
 		}
 	}
-}
-
-
-// calibrate the joystick home for 10 times
-void calibrateJoystick() {
-	Coordinate values;
-
-	for (int i = 0; i < 10; i++) {
-		values.x += analogRead(Pin::joystickX);
-		values.y += analogRead(Pin::joystickY);
-	}
-
-	joystickHome.x = values.x / 10;
-	joystickHome.y = values.y / 10;
 }
 
 
