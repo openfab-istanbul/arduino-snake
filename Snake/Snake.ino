@@ -27,9 +27,11 @@ const int joystickDown = A1;   // joystick X axis pin
 const int joystickLeft = A2;   // joystick Y axis pin
 const int joystickRight = A3;   // joystick Y axis pin
 
-const int CLK = 10;   // clock for LED matrix
-const int CS  = 11;  // chip-select for LED matrix
-const int DIN = 12; // data-in for LED matrix
+const int buzzer = 2;
+
+const int CLK = 9;   // clock for LED matrix
+const int CS  = 8;  // chip-select for LED matrix
+const int DIN = 7; // data-in for LED matrix
 
 // LED matrix brightness: between 0(darkest) and 15(brightest)
 const short intensity = 8;
@@ -42,7 +44,6 @@ const short initialSnakeLength = 3;
 
 
 void setup() {
-	Serial.begin(115200);  // set the same baud rate on your Serial Monitor
 	initialize();         // initialize pins & LED matrix
 }
 
@@ -235,13 +236,16 @@ void fixEdge() {
 
 void handleGameStates() {
 	if (gameOver || win) {
+    digitalWrite(buzzer, HIGH);
 		unrollSnake();
-
+    digitalWrite(buzzer, LOW);
+    
 		//showScoreMessage(snakeLength - initialSnakeLength);
 
-		//if (gameOver) {}
-		//else if (win) showWinMessage();
-
+    digitalWrite(buzzer, HIGH);
+    delay(1000);
+    digitalWrite(buzzer, LOW);
+    
 		// re-init the game
 		win = false;
 		gameOver = false;
@@ -308,6 +312,9 @@ void initialize() {
   pinMode(joystickLeft, INPUT_PULLUP);
   pinMode(joystickRight, INPUT_PULLUP);
 
+  pinMode(buzzer, OUTPUT);
+  digitalWrite(buzzer, LOW);
+  
 	matrix.shutdown(0, false);
 	matrix.setIntensity(0, intensity);
 	matrix.clearDisplay(0);
