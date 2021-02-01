@@ -21,13 +21,13 @@
 // ------------------------- user config ------------------------- //
 // --------------------------------------------------------------- //
 
-// there are defined all the pins
-const int button_UP = A0;   // joystick X axis pin
-const int button_DOWN = A1;   // joystick X axis pin
-const int button_LEFT = A2;   // joystick Y axis pin
-const int button_RIGHT = A3;   // joystick Y axis pin
+// there are defined all the pins, buttons for snake movement
+const int button_UP = A0;   
+const int button_DOWN = A1;   
+const int button_LEFT = A2;   
+const int button_RIGHT = A3;   
 
-const int buzzer = 2;
+const int buzzer = 2; // to be connected to piezobuzzer positive pin
 
 const int CLK = 9;   // clock for LED matrix
 const int CS  = 8;  // chip-select for LED matrix
@@ -51,7 +51,7 @@ void setup() {
 
 void loop() {
 	generateFood();    // if there is no food, generate one
-	scanJoystick();    // watches joystick movements & blinks with food
+	scanButtons();    // watches joystick movements & blinks with food
 	calculateSnake();  // calculates snake parameters
 	handleGameStates();
 }
@@ -81,9 +81,6 @@ Point snake;
 // food is not anywhere yet
 Point food(-1, -1);
 
-// construct with default values in case the user turns off the calibration
-Coordinate joystickHome(500, 500);
-
 // snake parameters
 int snakeLength = initialSnakeLength; // choosed by the user in the config section
 int snakeSpeed = 200; // Speed will slow down as the number increase (miliseconds added to every snake movement)
@@ -94,12 +91,6 @@ const short up     = 1;
 const short right  = 2;
 const short down   = 3; // 'down - 2' must be 'up'
 const short left   = 4; // 'left - 2' must be 'right'
-
-// threshold where movement of the joystick will be accepted
-const int joystickThreshold = 160;
-
-// artificial logarithmity (steepness) of the potentiometer (-1 = linear, 1 = natural, bigger = steeper (recommended 0...1))
-const float logarithmity = 0.4;
 
 // snake body segments storage
 int gameboard[8][8] = {};
@@ -130,8 +121,8 @@ void generateFood() {
 }
 
 
-// watches joystick movements & blinks with food
-void scanJoystick() {
+// watches button presses & blinks with food
+void scanButtons() {
 	int previousDirection = snakeDirection; // save the last direction
 	long timestamp = millis();
 
