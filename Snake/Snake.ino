@@ -36,9 +36,6 @@ const int DIN = 7; // data-in for LED matrix
 // LED matrix brightness: between 0(darkest) and 15(brightest)
 const short intensity = 8;
 
-// lower = faster message scrolling
-const short messageSpeed = 5;
-
 // initial snake length (1...63, recommended 3)
 const short initialSnakeLength = 3;
 
@@ -51,7 +48,7 @@ void setup() {
 
 void loop() {
 	generateFood();    // if there is no food, generate one
-	scanButtons();    // watches joystick movements & blinks with food
+	scanButtons();    // watches button presses & blinks with food
 	calculateSnake();  // calculates snake parameters
 	handleGameStates();
 }
