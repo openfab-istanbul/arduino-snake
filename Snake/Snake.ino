@@ -45,8 +45,9 @@ const short initialSnakeLength = 3;
 
 void setup() {
 	initialize();         // initialize pins & LED matrix
+  
+  sound_device_initialize ();
 }
-
 
 void loop() {
 	generateFood();    // if there is no food, generate one
@@ -236,16 +237,9 @@ void fixEdge() {
 
 void handleGameStates() {
 	if (gameOver || win) {
-    digitalWrite(buzzer, HIGH);
+    sound_game_over (); // plays game over music
 		unrollSnake();
-    digitalWrite(buzzer, LOW);
-    
-		//showScoreMessage(snakeLength - initialSnakeLength);
 
-    digitalWrite(buzzer, HIGH);
-    delay(1000);
-    digitalWrite(buzzer, LOW);
-    
 		// re-init the game
 		win = false;
 		gameOver = false;
@@ -257,6 +251,7 @@ void handleGameStates() {
 		snakeDirection = 0;
 		memset(gameboard, 0, sizeof(gameboard[0][0]) * 8 * 8);
 		matrix.clearDisplay(0);
+    sound_start_again ();
 	}
 }
 
@@ -327,4 +322,31 @@ void initialize() {
 // standard map function, but with floats
 float mapf(float x, float in_min, float in_max, float out_min, float out_max) {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+void sound_device_initialize (){
+ tone(buzzer,200,400);
+ delay(200);
+ tone(buzzer,400,400);
+ delay(200);
+ tone(buzzer,600,400);
+ delay(200);
+ tone(buzzer,800,400);
+}
+
+void sound_game_over (){
+ tone(buzzer,800,400);
+ delay(200);
+ tone(buzzer,600,400);
+ delay(200);
+ tone(buzzer,400,400);
+ delay(200);
+ tone(buzzer,200,400);
+}
+
+
+void sound_start_again (){
+ tone(buzzer,200,400);
+ delay(200);
+ tone(buzzer,800,400);
 }
