@@ -22,10 +22,10 @@
 // --------------------------------------------------------------- //
 
 // there are defined all the pins
-const int joystickUp = A0;   // joystick X axis pin
-const int joystickDown = A1;   // joystick X axis pin
-const int joystickLeft = A2;   // joystick Y axis pin
-const int joystickRight = A3;   // joystick Y axis pin
+const int button_UP = A0;   // joystick X axis pin
+const int button_DOWN = A1;   // joystick X axis pin
+const int button_LEFT = A2;   // joystick Y axis pin
+const int button_RIGHT = A3;   // joystick Y axis pin
 
 const int buzzer = 2;
 
@@ -137,10 +137,10 @@ void scanJoystick() {
 	while (millis() < timestamp + snakeSpeed) {
 
 		// determine the direction of the snake
-		if(digitalRead(joystickUp) == false) snakeDirection = up;
-		else if(digitalRead(joystickDown) == false) snakeDirection = down;
-		else if(digitalRead(joystickLeft) == false) snakeDirection = left;
-		else if(digitalRead(joystickRight) == false) snakeDirection = right;
+		if(digitalRead(button_UP) == false) snakeDirection = up;
+		else if(digitalRead(button_DOWN) == false) snakeDirection = down;
+		else if(digitalRead(button_LEFT) == false) snakeDirection = left;
+		else if(digitalRead(button_RIGHT) == false) snakeDirection = right;
 
 		// ignore directional change by 180 degrees (no effect for non-moving snake)
 		snakeDirection + 2 == previousDirection && previousDirection != 0 ? snakeDirection = previousDirection : 0;
@@ -307,10 +307,10 @@ void unrollSnake() {
 
 void initialize() {
 
-  pinMode(joystickUp, INPUT_PULLUP);
-  pinMode(joystickDown, INPUT_PULLUP);
-  pinMode(joystickLeft, INPUT_PULLUP);
-  pinMode(joystickRight, INPUT_PULLUP);
+  pinMode(button_UP, INPUT_PULLUP);
+  pinMode(button_DOWN, INPUT_PULLUP);
+  pinMode(button_LEFT, INPUT_PULLUP);
+  pinMode(button_RIGHT, INPUT_PULLUP);
 
   pinMode(buzzer, OUTPUT);
   digitalWrite(buzzer, LOW);
