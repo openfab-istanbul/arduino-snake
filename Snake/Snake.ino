@@ -83,7 +83,7 @@ int snakeLength = initialSnakeLength; // choosed by the user in the config secti
 int snakeSpeed = 200; // Speed will slow down as the number increase (miliseconds added to every snake movement)
 int snakeDirection = 0; // if it is 0, the snake does not move
 
-// direction constants
+// direction constants, tam olarak ne işe yarıyor?
 const short up     = 1;
 const short right  = 2;
 const short down   = 3; // 'down - 2' must be 'up'
@@ -121,7 +121,7 @@ void generateFood() {
 // watches button presses & blinks with food
 void scanButtons() {
 	int previousDirection = snakeDirection; // save the last direction
-	long timestamp = millis();
+	long timestamp = millis();  // Timestamp olmadan çalışıyor mu?
 
 	while (millis() < timestamp + snakeSpeed) {
 
@@ -172,7 +172,7 @@ void calculateSnake() {
 			return;
 	}
 
-	// if there is a snake body segment, this will cause the end of the game (snake must be moving)
+	// if there is a snake body segment, this will cause the end of the game (snake must be moving) , bunun üzerine de çalışmak gerek
 	if (gameboard[snake.row][snake.col] > 1 && snakeDirection != 0) {
 		gameOver = true;
 		return;
@@ -186,7 +186,7 @@ void calculateSnake() {
 		// increment snake length
 		snakeLength++;
 
-		// increment all the snake body segments
+		// increment all the snake body segments, buraya da bakılacak
 		for (int row = 0; row < 8; row++) {
 			for (int col = 0; col < 8; col++) {
 				if (gameboard[row][col] > 0 ) {
@@ -226,7 +226,7 @@ void fixEdge() {
 void handleGameStates() {
 	if (gameOver || win) {
     sound_game_over (); // plays game over music
-		unrollSnake();
+		unrollSnake(); //bu fazlalık olabilir
 
 		// re-init the game
 		win = false;
@@ -237,7 +237,7 @@ void handleGameStates() {
 		food.col = -1;
 		snakeLength = initialSnakeLength;
 		snakeDirection = 0;
-		memset(gameboard, 0, sizeof(gameboard[0][0]) * 8 * 8);
+		memset(gameboard, 0, sizeof(gameboard[0][0]) * 8 * 8); //bu satırı anlamamız lazım
 		matrix.clearDisplay(0);
     sound_start_again ();
 	}
@@ -302,7 +302,7 @@ void initialize() {
 	matrix.setIntensity(0, intensity);
 	matrix.clearDisplay(0);
 
-	randomSeed(analogRead(A5));
+	randomSeed(analogRead(A5)); // Bu ne işe yarıyor ??  
 	snake.row = random(8);
 	snake.col = random(8);
 }
