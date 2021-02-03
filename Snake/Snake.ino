@@ -43,7 +43,7 @@ const short initialSnakeLength = 3;
 void setup() {
 	initialize();         // initialize pins & LED matrix
   
-  sound_device_initialize ();
+  sound_device_initialize (); // plays the opening music
 }
 
 void loop() {
