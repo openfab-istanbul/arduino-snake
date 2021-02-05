@@ -23,9 +23,9 @@
 
 // there are defined all the pins, buttons for snake movement
 const int button_UP = A0;   
-const int button_DOWN = A1;   
-const int button_LEFT = A2;   
-const int button_RIGHT = A3;   
+const int button_RIGHT = A1;   
+const int button_DOWN = A2;   
+const int button_LEFT = A3;   
 
 const int buzzer = 2; // to be connected to piezobuzzer positive pin
 
@@ -68,7 +68,7 @@ bool win = false;
 bool gameOver = false;
 
 // primary snake head coordinates (snake head), it will be randomly generated
-Point snake;
+Point snake(-1, -1);
 
 // food is not anywhere yet
 Point food(-1, -1);
@@ -79,10 +79,10 @@ int snakeSpeed = 200; // Speed will slow down as the number increase (milisecond
 int snakeDirection = 0; // if it is 0, the snake does not move
 
 // direction constants, tam olarak ne işe yarıyor?
-const short up     = 1;
-const short right  = 2;
-const short down   = 3; // 'down - 2' must be 'up'
-const short left   = 4; // 'left - 2' must be 'right'
+const int up     = 1;
+const int right  = 2;
+const int down   = 3; // 'down - 2' must be 'up'
+const int left   = 4; // 'left - 2' must be 'right'
 
 // snake body segments storage
 int gameboard[8][8] = {};
