@@ -64,11 +64,6 @@ struct Point {
 	Point(int row = 0, int col = 0): row(row), col(col) {}
 };
 
-struct Coordinate {
-	int x = 0, y = 0;
-	Coordinate(int x = 0, int y = 0): x(x), y(y) {}
-};
-
 bool win = false;
 bool gameOver = false;
 
