@@ -60,7 +60,7 @@ void loop() {
 LedControl matrix(DIN, CLK, CS, 1);
 
 struct Point {
-	int row = 0, col = 0;
+	int row, col;
 	Point(int row = 0, int col = 0): row(row), col(col) {}
 };
 
