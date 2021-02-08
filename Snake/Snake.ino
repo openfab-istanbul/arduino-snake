@@ -232,7 +232,7 @@ void handleGameStates() {
 		food.col = -1;
 		snakeLength = initialSnakeLength;
 		snakeDirection = 0;
-		memset(gameboard, 0, sizeof(gameboard[0][0]) * 8 * 8); //bu satırı anlamamız lazım
+		memset(gameboard, 0, sizeof(gameboard)); //bu satırı anlamamız lazım
 		matrix.clearDisplay(0);
     sound_start_again ();
 	}
