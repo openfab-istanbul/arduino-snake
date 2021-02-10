@@ -79,6 +79,7 @@ int snakeSpeed = 200; // Speed will slow down as the number increase (milisecond
 int snakeDirection = 0; // if it is 0, the snake does not move
 
 // direction constants, tam olarak ne işe yarıyor?
+// yılanın on anki gittiği yön snakeDirection öğesinde tutuluyor bu up'a eşit olduğunda yani 1 olduğunda snake yukarı gidiyor
 const int up     = 1;
 const int right  = 2;
 const int down   = 3; // 'down - 2' must be 'up'
@@ -98,17 +99,17 @@ int gameboard[8][8] = {};
 // if there is no food, generate one, also check for victory
 void generateFood() {
 	if (food.row == -1 || food.col == -1) {
-		// self-explanatory
+
 		if (snakeLength >= 64) {
 			win = true;
 			return; // prevent the food generator from running, in this case it would run forever, because it will not be able to find a pixel without a snake
 		}
 
 		// generate food until it is in the right position
-		do {
+		while (gameboard[food.row][food.col] > 0){
 			food.col = random(8);
 			food.row = random(8);
-		} while (gameboard[food.row][food.col] > 0);
+		}
 	}
 }
 
@@ -116,7 +117,8 @@ void generateFood() {
 // watches button presses & blinks with food
 void scanButtons() {
 	int previousDirection = snakeDirection; // save the last direction
-	long timestamp = millis();  // Timestamp olmadan çalışıyor mu?
+	long timestamp = millis();  // Timestamp olmadan çalışıyor mu? -çalışmaz
+ 
 
 	while (millis() < timestamp + snakeSpeed) {
 
@@ -130,7 +132,7 @@ void scanButtons() {
 		snakeDirection + 2 == previousDirection && previousDirection != 0 ? snakeDirection = previousDirection : 0;
 		snakeDirection - 2 == previousDirection && previousDirection != 0 ? snakeDirection = previousDirection : 0;
 
-		// intelligently blink with the food
+		// intelligently blink with the food     ??? -utku
 		matrix.setLed(0, food.row, food.col, millis() % 100 < 50 ? 1 : 0);
 	}
 }
@@ -239,7 +241,7 @@ void handleGameStates() {
 }
 
 
-void unrollSnake() {
+void unrollSnake() {   // gereksiz uzun bence çıkaralım -utku
 	// switch off the food LED
 	matrix.setLed(0, food.row, food.col, 0);
 
@@ -300,11 +302,6 @@ void initialize() {
 	randomSeed(analogRead(A5)); // Bu ne işe yarıyor ??  
 	snake.row = random(8);
 	snake.col = random(8);
-}
-
-// standard map function, but with floats
-float mapf(float x, float in_min, float in_max, float out_min, float out_max) {
-	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 void sound_device_initialize (){
