@@ -176,39 +176,34 @@ void calculateSnake() {
   }
 
   //check if the food is eaten or not
-  if (snake.row == food.row && snake.col == food.col) {
+  if (snake.row == food.row && snake.col == food.col) { //sadece yeni bir kafa ekle ve gövdeyi aynı bırak
     food.row = -1;
     food.col = -1; //resets food
 
     //increase snake length by 1 dot
-    snakeLength ++; 
+    snakeLength ++;
+    
+    // add new snake head
+    gameboard[snake.row][snake.col] = snakeLength;
 
-    // increment all the snake body segments, buraya da bakılacak
-    for (int row = 0; row < 8; row++) {
-      for (int col = 0; col < 8; col++) {
-        if (gameboard[row][col] > 0 ) {
-          gameboard[row][col]++;
-        }
-      }
-    }
-    }
+  }
+  else{ // bütün sayıları bir sıra kaydır
 
-    // add new segment at the snake head location (snake moving)
+    // add new snake head
     gameboard[snake.row][snake.col] = snakeLength +1; //
 
-    // decrement all the snake body segment
+    //reduce previous numbers  
     for (int row = 0; row < 8; row++) {
       for (int col = 0; col < 8; col++) {
-      if (gameboard[row][col] > 0 ) {
-        gameboard[row][col]--;
-      }
+        //reduce previous numbers
+        if (gameboard[row][col] > 0 ) gameboard[row][col]--;
 
-      //display the current pixel
-      if (gameboard[row][col] == 0)
-      matrix.setLed(0, row, col, 0);
+        //display the current pixel
+        if (gameboard[row][col] == 0) matrix.setLed(0, row, col, 0);
+      }
            
     }
-   }
+  }
 }
 
 //to be able to make the snake pass through walls
