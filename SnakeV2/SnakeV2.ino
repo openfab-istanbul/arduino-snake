@@ -1,5 +1,3 @@
-#include "LedControl.h" // LED Matrix Library
-
 // 1-------------------------------------------------------------- //
 // -----------Wiring of buttons, Buzzer, LEDs and LED Matrix------ //
 // --------------------------------------------------------------- //
@@ -43,6 +41,8 @@ int snakeDirection = 0; //It is 0 initially, when user presses a button, this ha
 // ------Defining variables and creating matrix structure--------- //
 // --------------------------------------------------------------- //
 
+#include "LedControl.h" // LED Matrix Library
+
 LedControl matrix(Matrix_DIN,Matrix_CLK,Matrix_CS,1);
 
 int gameboard[8][8] = {}; //creating an empty matrix as game board
@@ -50,13 +50,11 @@ int gameboard[8][8] = {}; //creating an empty matrix as game board
 bool win = false; 
 bool gameOver = false;
 
-struct Point { //There is no Point data type in arduino, but we structure one
-  int row, col;
-  Point(int row = 0, int col = 0): row(row), col(col) {}
-};
+int snake_row=-1;
+int snake_col=-1;
+int food_row=-1;
+int food_col=-1;
 
-Point snake(-1, -1); //we created a Point data type variable by writing this
-Point food(-1,-1); //we created a Point data type variable by writing this
 
 // (-1 ,-1) means that we don't want them in the board yet, we just wanted to create the variable
 // corresponding functions will change the snake and food points
@@ -93,7 +91,7 @@ void setup() {
 // --------------------------------------------------------------- //
 
 void generateFood () {
-  if (food.row == -1 || food.col == -1) {
+  if (food_row == -1 || food_col == -1) {
     if (snakeLength >= 64) {
       win=true;
       return; //stops the food generator, orherwise it will run forever, because snake length is 64 and all pixels are occupied
@@ -101,9 +99,9 @@ void generateFood () {
     //generate food to an empty led without generating on the snake
     // We are going to use a do - while expression, google it for details
     do {
-      food.col = random(8);
-      food.row = random(8);
-    } while(gameboard[food.row][food.col] > 0) ;
+      food_col = random(8);
+      food_row = random(8);
+    } while(gameboard[food_row][food_col] > 0) ;
   }
 }
 
@@ -131,9 +129,9 @@ void scanButtons(){
 
     // food blinking effect (this code is here because this is the only loop that runs continuously)
     if(millis() % 100 < 50)
-    matrix.setLed(0, food.row, food.col, 1);
+    matrix.setLed(0, food_row, food_col, 1);
     else
-    matrix.setLed(0, food.row, food.col, 0);
+    matrix.setLed(0, food_row, food_col, 0);
     
 
   }
@@ -142,27 +140,27 @@ void scanButtons(){
 void calculateSnake() {
   switch (snakeDirection) {
     case up:
-    snake.row--;
+    snake_row--;
     fixEdge();
-    matrix.setLed(0, snake.row, snake.col, 1);
+    matrix.setLed(0, snake_row, snake_col, 1);
     break;  
 
     case right:
-    snake.col++;
+    snake_col++;
     fixEdge();
-    matrix.setLed(0, snake.row, snake.col, 1);
+    matrix.setLed(0, snake_row, snake_col, 1);
     break;  
 
     case down:
-    snake.row++;
+    snake_row++;
     fixEdge();
-    matrix.setLed(0, snake.row, snake.col, 1);
+    matrix.setLed(0, snake_row, snake_col, 1);
     break;  
 
     case left:
-    snake.col--;
+    snake_col--;
     fixEdge();
-    matrix.setLed(0, snake.row, snake.col, 1);
+    matrix.setLed(0, snake_row, snake_col, 1);
     break; 
 
     default: //if snake is not moving, go to the starting line of the loop
@@ -170,27 +168,27 @@ void calculateSnake() {
   }
 
   //if snake head collide with the body, game over
-  if (gameboard[snake.row][snake.col] > 1 && snakeDirection != 0) {
+  if (gameboard[snake_row][snake_col] > 1 && snakeDirection != 0) {
     gameOver = true ;
     return;
   }
 
   //check if the food is eaten or not
-  if (snake.row == food.row && snake.col == food.col) { //sadece yeni bir kafa ekle ve gövdeyi aynı bırak
-    food.row = -1;
-    food.col = -1; //resets food
+  if (snake_row == food_row && snake_col == food_col) { //sadece yeni bir kafa ekle ve gövdeyi aynı bırak
+    food_row = -1;
+    food_col = -1; //resets food
 
     //increase snake length by 1 dot
     snakeLength ++;
     
     // add new snake head
-    gameboard[snake.row][snake.col] = snakeLength;
+    gameboard[snake_row][snake_col] = snakeLength;
 
   }
   else{ // bütün sayıları bir sıra kaydır
 
     // add new snake head
-    gameboard[snake.row][snake.col] = snakeLength +1; //
+    gameboard[snake_row][snake_col] = snakeLength +1; //
 
     //reduce previous numbers  
     for (int row = 0; row < 8; row++) {
@@ -209,14 +207,14 @@ void calculateSnake() {
 //to be able to make the snake pass through walls
 void fixEdge() {
 
-  if (snake.col < 0)
-  snake.col += 8;
-  if (snake.col > 7)
-  snake.col -= 8;
-  if (snake.row < 0)
-  snake.row += 8;
-  if (snake.row > 7)
-  snake.row -= 8;
+  if (snake_col < 0)
+  snake_col += 8;
+  if (snake_col > 7)
+  snake_col -= 8;
+  if (snake_row < 0)
+  snake_row += 8;
+  if (snake_row > 7)
+  snake_row -= 8;
 
 
 }
@@ -228,10 +226,10 @@ void handleGameStates() {
       //re initize game
       win=false;
       gameOver=false;
-      snake.row = random(8);
-      snake.col = random(8);
-      food.row = -1;
-      food.col = -1;
+      snake_row = random(8);
+      snake_col = random(8);
+      food_row = -1;
+      food_col = -1;
       snakeLength = initialSnakeLength;
       snakeDirection = 0;
       memset(gameboard, 0 , sizeof(gameboard));
@@ -245,10 +243,10 @@ void handleGameStates() {
       //re initize game
       win=false;
       gameOver=false;
-      snake.row = random(8);
-      snake.col = random(8);
-      food.row = -1;
-      food.col = -1;
+      snake_row = random(8);
+      snake_col = random(8);
+      food_row = -1;
+      food_col = -1;
       snakeLength = initialSnakeLength;
       snakeDirection = 0;
       memset(gameboard, 0 , sizeof(gameboard));
@@ -274,8 +272,8 @@ void initialize() {
   randomSeed(analogRead(A5)); 
   // Since analog inputs are not stable when not connected,
   // it is a good source for random number generation
-  snake.row = random(8);
-  snake.col = random(8);
+  snake_row = random(8);
+  snake_col = random(8);
 }
 
 void sound_win (){
