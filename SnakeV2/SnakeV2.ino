@@ -55,8 +55,7 @@ int snake_col=-1;
 int food_row=-1;
 int food_col=-1;
 
-
-// (-1 ,-1) means that we don't want them in the board yet, we just wanted to create the variable
+// -1 means that we don't want them in the board yet, we just wanted to create the variable
 // corresponding functions will change the snake and food points
 
 //direction constants
