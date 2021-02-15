@@ -96,11 +96,11 @@ void generateFood () {
       return; //stops the food generator, orherwise it will run forever, because snake length is 64 and all pixels are occupied
     }
     //generate food to an empty led without generating on the snake
-    // We are going to use a do - while expression, google it for details
-    do {
+
+    while(gameboard[food_row][food_col] > 0){
       food_col = random(8);
       food_row = random(8);
-    } while(gameboard[food_row][food_col] > 0) ;
+    }
   }
 }
 
