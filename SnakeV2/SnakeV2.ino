@@ -93,7 +93,7 @@ void generateFood () {
   if (food_row == -1 || food_col == -1) {
     if (snakeLength >= 64) {
       win=true;
-      return; //stops the food generator, orherwise it will run forever, because snake length is 64 and all pixels are occupied
+      return; //stops the food generator, otherwise it will run forever, because snake length is 64 and all pixels are occupied
     }
     //generate food to an empty led without generating on the snake
 
@@ -174,6 +174,7 @@ void calculateSnake() {
 
   //check if the food is eaten or not
   if (snake_row == food_row && snake_col == food_col) { //sadece yeni bir kafa ekle ve gövdeyi aynı bırak
+    digitalWrite(LED_2,HIGH);
     food_row = -1;
     food_col = -1; //resets food
 
@@ -182,6 +183,8 @@ void calculateSnake() {
     
     // add new snake head
     gameboard[snake_row][snake_col] = snakeLength;
+    delay(100);
+    digitalWrite(LED_2,LOW);
 
   }
   else{ // bütün sayıları bir sıra kaydır
@@ -220,8 +223,10 @@ void fixEdge() {
 
 void handleGameStates() {
   if (gameOver){
+      digitalWrite(LED_1,HIGH);
       sound_game_over (); // plays game over music 
-    
+      delay(500);
+      digitalWrite(LED_1,LOW);    
       //re initize game
       win=false;
       gameOver=false;
