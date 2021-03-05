@@ -329,7 +329,7 @@ void loop() {
   generateFood();    // if there is no food, generate one
   scanButtons();    // watches button presses & blinks with food
   calculateSnake();  // calculates snake parameters
-  //handleGameStates();
+  handleGameStates();
 }
 
 // 6-------------------------------------------------------------- //
