@@ -1,24 +1,21 @@
 // 1-------------------------------------------------------------- //
-// -----------Wiring of buttons, Buzzer, LEDs and LED Matrix------ //
+// -----------Wiring of buttons, Buzzer and LED Matrix------------ //
 // --------------------------------------------------------------- //
 
 // Buttons' other pin should be connected to ground
-const int Button_Up = A0;
-const int Button_Down = A1;
-const int Button_Left = A2;
-const int Button_Right = A3;
+const int Button_Up = 7;
+const int Button_Down = 5;
+const int Button_Left = 6;
+const int Button_Right = 8;
 
-const int Buzzer = 2; //to be connected to piezoBuzzer positive pin
+const int Buzzer = 9; //to be connected to piezoBuzzer positive pin
 
-const int LED_1 = 3; //to be connected to LED 1's positive pin
-const int LED_2 = 4; //to be connected to LED 2's positive pin
-
-const int Matrix_CLK = 9; // CLK pin of the LED Matrix
-const int Matrix_CS = 8;  // CS pin of the LED Matrix
-const int Matrix_DIN = 7;  // DIN pin of the LED Matrix
+const int Matrix_CLK = 4; // CLK pin of the LED Matrix
+const int Matrix_CS = 3;  // CS pin of the LED Matrix
+const int Matrix_DIN = 2;  // DIN pin of the LED Matrix
 
 // 1-------------------------------------------------------------- //
-// ---end of--Wiring of buttons, Buzzer, LEDs and LED Matrix------ //
+// ---end of--Wiring of buttons, Buzzer and LED Matrix------------ //
 // --------------------------------------------------------------- //
 
 // 2-------------------------------------------------------------- //
@@ -26,7 +23,7 @@ const int Matrix_DIN = 7;  // DIN pin of the LED Matrix
 // --------------------------------------------------------------- //
 
 //If you want to change the following data types during game, remove const in front
-const int Matrix_Brightness = 8;
+const int Matrix_Brightness = 8; // min 0, max 15
 const int initialSnakeLength = 3;
 
 int snakeLength = initialSnakeLength;
