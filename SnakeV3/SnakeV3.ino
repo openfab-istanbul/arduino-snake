@@ -3,19 +3,16 @@
 // --------------------------------------------------------------- //
 
 // Buttons' other pin should be connected to ground
-const int Button_Up = A0;
-const int Button_Down = A1;
-const int Button_Left = A2;
-const int Button_Right = A3;
+const int Button_Up = 7;
+const int Button_Down = 5;
+const int Button_Left = 6;
+const int Button_Right = 8;
 
-const int Buzzer = 2; //to be connected to piezoBuzzer positive pin
+const int Buzzer = 9; //to be connected to piezoBuzzer positive pin
 
-const int LED_1 = 3; //to be connected to LED 1's positive pin
-const int LED_2 = 4; //to be connected to LED 2's positive pin
-
-const int Matrix_CLK = 9; // CLK pin of the LED Matrix
-const int Matrix_CS = 8;  // CS pin of the LED Matrix
-const int Matrix_DIN = 7;  // DIN pin of the LED Matrix
+const int Matrix_CLK = 4; // CLK pin of the LED Matrix
+const int Matrix_CS = 3;  // CS pin of the LED Matrix
+const int Matrix_DIN = 2;  // DIN pin of the LED Matrix
 
 // 1-------------------------------------------------------------- //
 // ---end of--Wiring of buttons, Buzzer, LEDs and LED Matrix------ //
@@ -174,7 +171,7 @@ void calculateSnake() {
 
   //check if the food is eaten or not
   if (snake_row == food_row && snake_col == food_col) { //sadece yeni bir kafa ekle ve gövdeyi aynı bırak
-    digitalWrite(LED_2,HIGH);
+   
     food_row = -1;
     food_col = -1; //resets food
 
@@ -184,7 +181,7 @@ void calculateSnake() {
     // add new snake head
     gameboard[snake_row][snake_col] = snakeLength;
     delay(100);
-    digitalWrite(LED_2,LOW);
+
 
   }
   else{ // bütün sayıları bir sıra kaydır
@@ -223,10 +220,8 @@ void fixEdge() {
 
 void handleGameStates() {
   if (gameOver){
-      digitalWrite(LED_1,HIGH);
+  
       sound_game_over (); // plays game over music 
-      delay(500);
-      digitalWrite(LED_1,LOW);    
       //re initize game
       win=false;
       gameOver=false;
