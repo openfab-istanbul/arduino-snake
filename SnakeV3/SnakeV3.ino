@@ -180,7 +180,6 @@ void calculateSnake() {
     
     // add new snake head
     gameboard[snake_row][snake_col] = snakeLength;
-    delay(100);
 
 
   }
